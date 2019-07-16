@@ -1,0 +1,67 @@
+1. Listar todos las personas cuyo apellido comience por Pere.
+
+MATCH (n:persona)
+WHERE n.apellido STARTS WITH "Pere"
+RETURN n.nombre, n.apellido
+
+2. Listar todas las personas que Anthony Tacuri conoce
+
+MATCH (n:persona)-[r:conoce]->(u:persona)
+WHERE n.nombre = "Anthony" and n.apellido = "Tacuri"
+RETURN u.nombre, u.apellido
+
+3. Listar todas las personas que escuchan musica de genero "electronica"
+
+MATCH (n:persona)-[r:escucha]->(u:musica)
+WHERE u.genero = "electronica"
+RETURN n.nombre, n.apellido
+
+4. Listar todas las personas que escuchen al menos 2 generos de musica diferentes
+
+MATCH (n:persona)-[r:escucha]->(m:musica)
+WITH n.nombre AS nombre, n.apellido AS apellido,
+count(r) AS numero WHERE numero >= 2
+RETURN nombre, apellido, numero
+
+5. Listar todas las personas que al menos visitaron 2 lugares diferentes
+
+MATCH (n:persona)-[r:visito]->(l:lugar)
+WITH n.nombre AS nombre, n.apellido AS apellido,
+count(r) AS numero WHERE numero >= 2
+RETURN nombre, apellido, numero
+
+6. Listar las personas que conocen a alquien que escucha musica de genero "salsa"
+
+match (p:persona)-[r:conoce]->(s:persona)-[o:escucha]->(m:musica)
+where m.genero = "salsa" return p.nombre
+
+7. Listar el nombre y apellido de las personas que conocen a alguien que hace deportes
+
+match (p:persona)-[r:conoce]->(s:persona)-[d:hace]->(e:pasatiempo)
+where e.actividad = "deportes" return p.nombre, p.apellido
+
+8. Listar el nombre y apellido de las personas que conocen a alguien que juege "league of legends" y les gusta dormir
+
+match (s:persona)-[d:hace]->(e:pasatiempo)
+where e.actividad = "dormir" with s AS dormir
+match (dormir)-[p:juega]->(j:juegos)
+where j.nombre = "league of legends" with dormir AS gamer 
+match (p:persona)-[r:conoce]->(gamer)
+return  p.nombre, p.apellido
+
+9. Listar el nombre y apellido de las personas que conocen a alguien que visito "Guayaquil" y vieron "avengers"
+
+match (s:persona)-[v:vio]->(p:pelicula)
+where p.nombre = "avengers" with s AS movie
+match (movie)-[p:visito]->(l:lugar)
+where l.lugar = "Guayaquil" with movie AS place 
+match (p:persona)-[r:conoce]->(place)
+return  p.nombre, p.apellido
+
+10. Listar el nombre y apellido de las personas que conocen a alguien que juege "DOTA2"
+
+match (s:persona)-[j:juega]->(p:juegos)
+where p.nombre = "DOTA2" with s AS gamer
+match (u:persona)-[r:conoce]->(gamer)
+return  u.nombre, u.apellido
+
