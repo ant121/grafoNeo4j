@@ -1,3 +1,5 @@
+Nombre: Anthony Tacuri
+Fecha: 15/07/2019
 1. Listar todos las personas cuyo apellido comience por Pere.
 
 MATCH (n:persona)
